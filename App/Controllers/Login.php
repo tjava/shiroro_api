@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \App\Models\User;
 use \App\Auth;
+use \App\Jwt;
 
 /**
  * Login controller
@@ -28,10 +29,28 @@ class Login extends \Core\Controller
         $input = json_decode(file_get_contents('php://input'), true);
 
         $user = User::authenticate($input['email'], $input['password']);
+        
+        $iss = 'localhost';
+        $iat = time();
+        $exp = $iat + 15780000;
+        $user_data = [
+            $user->id,
+            $user->name,
+            $user->email
+        ];
+
+        $payload = json_encode([
+            'iss' => $iss,
+            'iat' => $iat,
+            'exp' => $exp,
+            'user' => $user_data
+        ]);
+
+        $jwt = Jwt::encode($payload);
 
         if ($user) {
 
-            echo json_encode($this->response(200, 'Login Successful', 'data', ['access token']));
+            echo json_encode($this->response(200, 'Login Successful', 'data', ['access token' => $jwt]));
             exit;
 
         } else {

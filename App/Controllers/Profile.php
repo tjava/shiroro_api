@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Auth;
-use \App\Flash;
 
 /**
  * Profile controller
@@ -33,9 +32,13 @@ class Profile extends Authenticated
      */
     public function showAction()
     {
-        View::renderTemplate('Profile/show.html', [
-            'user' => $this->user
-        ]);
+        if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            echo json_encode($this->response(405, 'Method Not Allowed'));
+            exit;
+        }
+
+        echo json_encode($this->response(200, 'Successful', 'data', $this->user));
+        exit;
     }
 
     /**
@@ -58,8 +61,6 @@ class Profile extends Authenticated
     public function updateAction()
     {
         if ($this->user->updateProfile($_POST)) {
-
-            Flash::addMessage('Changes saved');
 
             $this->redirect('/profile/show');
 

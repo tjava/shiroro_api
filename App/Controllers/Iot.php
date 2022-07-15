@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use \App\Auth;
 use \App\Dbgeter;
 
 /**
@@ -20,6 +21,8 @@ class Iot extends \Core\Controller
     {
         parent::before();
 
+        $this->user = Auth::getUser();
+
         $this->iot = Dbgeter::Iot();
     }
 
@@ -30,21 +33,51 @@ class Iot extends \Core\Controller
      */
     public function getAction()
     {
+
         if($_SERVER['REQUEST_METHOD'] !== 'GET') {
             echo json_encode($this->response(405, 'Method Not Allowed'));
             exit;
         }
 
-        $data = $this->iot->data($this->route_params['id']);
+        $data = $this->iot->data(1);
 
         if ($data) {
 
-            echo json_encode($this->response(201, 'Account Created', 'data', $data));
+            echo json_encode($this->response(200, 'Successful', 'data', $data));
             exit;
 
         } else {
 
             echo json_encode($this->response(404, 'Data Not Found'));
+            exit;
+
+        }
+
+    }
+
+    /**
+     * Get to database
+     *
+     * @return void
+     */
+    public function dataAction()
+    {
+
+        if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            echo json_encode($this->response(405, 'Method Not Allowed'));
+            exit;
+        }
+
+        $data = $this->iot->data(1);
+
+        if ($data) {
+
+            echo $data->manhours_completed.','.$data->fatalities.','.$data->near_misses_reported.','.$data->lost_time_incident.','.$data->environmental_incidents.','.$data->first_aid_case.','.$data->emergency_drills;
+            exit;
+
+        } else {
+
+            echo 'Data Not Found';
             exit;
 
         }
@@ -58,6 +91,11 @@ class Iot extends \Core\Controller
      */
     public function createAction()
     {
+        if (!is_object($this->user)) {
+            echo json_encode($this->response(401, 'Permission Denied'));
+            exit;
+        }
+
         if($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode($this->response(405, 'Method Not Allowed'));
             exit;
@@ -104,6 +142,11 @@ class Iot extends \Core\Controller
      */
     public function updateAction()
     {
+        if (!is_object($this->user)) {
+            echo json_encode($this->response(401, 'Permission Denied', 'error', $this->user));
+            exit;
+        }
+        
         if($_SERVER['REQUEST_METHOD'] !== 'PUT') {
             echo json_encode($this->response(405, 'Method Not Allowed'));
             exit;

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use \App\Jwt;
 use App\Models\User;
 use App\Models\RememberedLogin;
 
@@ -94,13 +95,31 @@ class Auth
      */
     public static function getUser()
     {
-        if (isset($_SESSION['user_id'])) {
+        $headers = getallheaders();
 
-            return User::findByID($_SESSION['user_id']);
+        if (array_key_exists('Authorization', $headers)) {
+            $access_token = explode(" ", $headers['Authorization'])[1];
+        } elseif (array_key_exists('access_token', $headers)) {
+            $access_token = $headers['access_token']; 
+        } else {
+            return 'No Authorization Provided';
+        }
+
+        
+        if (isset($access_token)) {
+            
+            $jwt = Jwt::decode($access_token);
+            if ($jwt === "Expired token") {
+                return "Expired token";
+            } elseif ($jwt === "Invalid signature") {
+                return "Invalid signature";
+            } elseif ($jwt) {
+                return json_decode($jwt);
+            }
 
         } else {
 
-            return static::loginFromRememberCookie();
+            return;
         }
     }
 

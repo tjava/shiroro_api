@@ -74,7 +74,7 @@ class Iot extends \Core\Model
      */
     public function data($id)
     {
-        $sql = 'SELECT * FROM iot WHERE id = :id ORDER BY id DESC';
+        $sql = 'SELECT * FROM iot WHERE id = :id';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);

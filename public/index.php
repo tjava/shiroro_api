@@ -33,14 +33,16 @@ $router = new Core\Router();
 
 // Add the routes
 $router->add('', ['controller' => 'Home', 'action' => 'index']);
-$router->add('login', ['controller' => 'Login', 'action' => 'create']);
-$router->add('signup', ['controller' => 'Signup', 'action' => 'create']);
-$router->add('logout', ['controller' => 'Login', 'action' => 'destroy']);
+$router->add('api/login', ['controller' => 'Login', 'action' => 'create']);
+$router->add('api/signup', ['controller' => 'Signup', 'action' => 'create']);
+$router->add('api/logout', ['controller' => 'Login', 'action' => 'destroy']);
 $router->add('password/reset/{token:[\da-f]+}', ['controller' => 'Password', 'action' => 'reset']);
 // $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'action' => 'activate']);
-$router->add('iot/create', ['controller' => 'Iot', 'action' => 'create']);
-$router->add('iot/get/{id:[a-zA-Z0-9.,_-]+}', ['controller' => 'Iot', 'action' => 'get']);
-$router->add('iot/update/{id:[a-zA-Z0-9.,_-]+}', ['controller' => 'Iot', 'action' => 'update']);
+$router->add('api/iot/create', ['controller' => 'Iot', 'action' => 'create']);
+$router->add('api/iot/get', ['controller' => 'Iot', 'action' => 'get']);
+$router->add('api/iot/update/{id:[a-zA-Z0-9.,_-]+}', ['controller' => 'Iot', 'action' => 'update']);
+$router->add('api/iot/data', ['controller' => 'Iot', 'action' => 'data']);
+$router->add('api/profile', ['controller' => 'Profile', 'action' => 'show']);
 $router->add('{controller}/{action}');
 
 $router->dispatch($_SERVER['QUERY_STRING']);

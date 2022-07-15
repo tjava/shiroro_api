@@ -1,0 +1,220 @@
+swagger: "2.0"
+info:
+  title: e-STATISTIC API's
+  description: North South Power Company Limited API's
+  version: 1.0.0
+
+schemes: [http, https]
+
+basePath: /api/
+tags:
+  - name: Auth
+    description: User Authentication
+  - name: Iot
+    description: Iot Data
+  - name: Profile
+    description: User Profile
+
+paths:
+  /signup:
+    post:
+      tags:
+        - Auth
+      summary: Signup
+      parameters:
+        - in: body
+          name: auth
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: successful
+        "400":
+          description: Bad request
+        "500":
+          description: Server error
+
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      parameters:
+        - in: body
+          name: auth
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: successful
+        "400":
+          description: Bad request
+        "500":
+          description: Server error
+
+  /iot/create:
+    post:
+      security:
+        - JWT: []
+      tags:
+        - Iot
+      summary: Create Iot Data
+      parameters:
+        - in: body
+          name: iot
+          schema:
+            type: object
+            properties:
+              manhours_completed:
+                type: integer
+              fatalities:
+                type: integer
+              near_misses_reported:
+                type: integer
+              lost_time_incident:
+                type: integer
+              environmental_incidents:
+                type: integer
+              first_aid_case:
+                type: integer
+              emergency_drills:
+                type: integer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "201":
+          description: successful created
+        "400":
+          description: Bad request
+        "500":
+          description: Server error
+
+  /iot/get:
+    get:
+      tags:
+        - Iot
+      summary: Get Iot Data
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Bad request
+        "500":
+          description: Server error
+
+  /iot/update/{id}:
+    put:
+      security:
+        - JWT: []
+      tags:
+        - Iot
+      summary: Update Iot Data
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: iot
+          schema:
+            type: object
+            properties:
+              manhours_completed:
+                type: integer
+              fatalities:
+                type: integer
+              near_misses_reported:
+                type: integer
+              lost_time_incident:
+                type: integer
+              environmental_incidents:
+                type: integer
+              first_aid_case:
+                type: integer
+              emergency_drills:
+                type: integer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful updated
+        "400":
+          description: Bad request
+        "500":
+          description: Server error
+
+  /iot/data:
+    get:
+      tags:
+        - Iot
+      summary: Data To Be Consume By Hardware Only
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Bad request
+        "500":
+          description: Server error
+
+  /profile:
+    get:
+      security:
+        - JWT: []
+      tags:
+        - Profile
+      summary: Get User Profile
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: Bad request
+        "500":
+          description: Server error
+
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: access_token
+    in: header
+# securityDefinitions:
+#   api_key:
+#     type: apiKey
+#     name: Authorization
+#     in: header
