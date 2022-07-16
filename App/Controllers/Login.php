@@ -30,25 +30,25 @@ class Login extends \Core\Controller
 
         $user = User::authenticate($input['email'], $input['password']);
         
-        $iss = 'localhost';
-        $iat = time();
-        $exp = $iat + 15780000;
-        $user_data = [
-            $user->id,
-            $user->name,
-            $user->email
-        ];
-
-        $payload = json_encode([
-            'iss' => $iss,
-            'iat' => $iat,
-            'exp' => $exp,
-            'user' => $user_data
-        ]);
-
-        $jwt = Jwt::encode($payload);
-
+        
         if ($user) {
+            $iss = 'localhost';
+            $iat = time();
+            $exp = $iat + 15780000;
+            $user_data = [
+                $user->id,
+                $user->name,
+                $user->email
+            ];
+    
+            $payload = json_encode([
+                'iss' => $iss,
+                'iat' => $iat,
+                'exp' => $exp,
+                'user' => $user_data
+            ]);
+    
+            $jwt = Jwt::encode($payload);
 
             echo json_encode($this->response(200, 'Login Successful', 'data', ['access token' => $jwt]));
             exit;
