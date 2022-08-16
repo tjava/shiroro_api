@@ -20,19 +20,19 @@ class Config
      * Database name
      * @var string
      */
-    const DB_NAME = 'bluewavetk_shiroro_api';
+    const DB_NAME = 'shiroro_api';
 
     /**
      * Database user
      * @var string
      */
-    const DB_USER = 'bluewavetk_shiroro_api';
+    const DB_USER = 'root';
 
     /**
      * Database password
      * @var string
      */
-    const DB_PASSWORD = 'Password4shiroro_api';
+    const DB_PASSWORD = '';
 
     /**
      * Show or hide error messages on screen

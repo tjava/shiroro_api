@@ -21,6 +21,11 @@ class Login extends \Core\Controller
      */
     public function createAction()
     {
+        if($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            echo json_encode($this->response(200, 'Preflight Accepted'));
+            exit;
+        }
+        
         if($_SERVER['REQUEST_METHOD'] !== 'POST') {
             echo json_encode($this->response(405, 'Method Not Allowed'));
             exit;
